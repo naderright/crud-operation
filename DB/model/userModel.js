@@ -2,10 +2,18 @@ const  mongoose  = require("mongoose");
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto-js');
 const userSchema = new mongoose.Schema({
-  name:{
+  first_name:{
       type:String,
       required:true
   },
+  last_name:{
+    type:String,
+    required:true
+},
+age:{
+  type:Number,
+  required:true
+},
  email:{
     type:String,
     required:true,
@@ -15,15 +23,12 @@ const userSchema = new mongoose.Schema({
     type:String,
     required:true
  },
-phone :{
-    type:String,
-      required:true
-}
+
 },{timestamp:true});
 
 userSchema.pre('save',async function(next){
     this.password = await bcrypt.hash(this.password,parseInt(process.env.saltRound));
-    this.phone = await crypto.AES.encrypt(`${this.phone}`,process.env.en_secret);
+    //this.phone = await crypto.AES.encrypt(`${this.phone}`,process.env.en_secret);
     next();
 });
 
